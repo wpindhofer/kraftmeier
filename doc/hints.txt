@@ -1,0 +1,7 @@
+### Start Mongo DB ###
+mongod --config C:\Development\Kraftmeier\kraftmeier-crud-app\cfg\mongod.cfg
+
+### Start nodejs express server äää
+cd C:\Development\Kraftmeier\kraftmeier-crud-app\src\api
+nodemon server
+
