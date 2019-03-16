@@ -7,7 +7,7 @@ let Workout = new Schema({
         type: String
     },
     workout_created_date: {
-        type: String
+        type: Date
     },
 },{
     collection: 'workout'

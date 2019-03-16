@@ -3,6 +3,7 @@ import axios from "axios";
 import WorkoutDataRetriever from "./backendComm/WorkoutDataRetriever";
 import Edit from "./edit.component";
 import Create from "./create.component";
+import DateFormatHelper from "../helper/DateFormatHelper";
 
 const headerItem = (
     <p>
@@ -14,7 +15,7 @@ function RenderWorkouts(props) {
     const renderMe = props.workout.map((b) =>
         <tr key={b._id}>
             <td>{b.workout_name}</td>
-            <td>{b.workout_created_date}</td>
+            <td>{DateFormatHelper.getFormattedData(b.workout_created_date)}</td>
             <td>
                 <button className="btn btn-primary" key={b._id + 'edit'}
                         onClick={() => props.editItem(b._id)}>Edit
