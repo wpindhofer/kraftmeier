@@ -3,8 +3,8 @@ import axios from "axios";
 import WorkoutDataRetriever from "./backendComm/WorkoutDataRetriever";
 import Edit from "./edit.component";
 import Create from "./create.component";
-import DateFormatHelper from "../helper/DateFormatHelper";
-import Modal from '../helper/modal.component';
+import DateFormatHelper from "../js-helper-classes/DateFormatHelper";
+import Modal from '../generic/modal.component';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -90,7 +90,6 @@ export default class Index extends Component {
 
 
     }
-
 
     getWorkoutData() {
         WorkoutDataRetriever.getWorkoutData('', (w) => this.setState({workout: w}));

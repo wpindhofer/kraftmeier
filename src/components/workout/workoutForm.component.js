@@ -1,9 +1,10 @@
 import React, {Component} from 'react';
 import WorkoutDataRetriever from "./backendComm/WorkoutDataRetriever";
-import DateFormatHelper from "../helper/DateFormatHelper";
+import DateFormatHelper from "../js-helper-classes/DateFormatHelper";
 import axios from "axios";
 import Button from '@material-ui/core/Button';
-import styled from '../helper/StyledHelper';
+import TextField from '@material-ui/core/TextField';
+import styled from '../js-helper-classes/StyledHelper';
 
 
 const MyButton = styled(Button)({
@@ -24,7 +25,6 @@ export default class WorkoutForm extends Component {
                 workout_created_date: null,
                 workout_created_date_Formatted: '',
             },
-            pageStatus: '',
         }
     }
 
@@ -78,31 +78,31 @@ export default class WorkoutForm extends Component {
     render() {
         return (
             <div style={{marginTop: 10}}>
-                {this.state.pageStatus ? <div>{this.state.pageStatus}</div> : ''}
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
-                        <label>Trainingsplan Name: </label>
-                        <input
-                            type="text"
-                            className="form-control"
+                        <TextField
+                            id="workout_name"
+                            label="Trainingsplan Name"
+                            // className={classes.textField}
                             value={this.state.workoutObj.workout_name}
                             onChange={this.onChangeWorkoutName}
+                            margin="normal"
                             autoFocus
                         />
                     </div>
                     <div className="form-group">
-                        <label>Erstellt am: </label>
-                        <input type="text"
-                               className="form-control"
-                               value={this.state.workoutObj.workout_created_date_Formatted}
-                               disabled
+                        <TextField
+                            id="created_date"
+                            label="Erstellt am"
+                            // className={classes.textField}
+                            value={this.state.workoutObj.workout_created_date_Formatted}
+                            disabled
+                            margin="normal"
                         />
                     </div>
-                    <div className="form-group">
-                        <MyButton variant="contained" color="primary" type="submit">Speichern</MyButton>
-                        <MyButton variant="contained" key={'back'} onClick={() => this.props.back(false)}>Zurück
-                        </MyButton>
-                    </div>
+                    <MyButton variant="contained" color="primary" type="submit">Speichern</MyButton>
+                    <MyButton variant="contained" key={'back'} onClick={() => this.props.back(false)}>Zurück
+                    </MyButton>
                 </form>
             </div>
         )

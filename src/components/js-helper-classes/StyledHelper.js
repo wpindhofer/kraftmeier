@@ -3,8 +3,7 @@ import classNames from 'classnames';
 import PropTypes from 'prop-types';
 import { withStyles } from '@material-ui/core/styles';
 
-// A function you can extract and put into its own module.
-// Yes, 15 lines of code, it's all you need.
+// Makes it possible to use Material-UI Style as separate component
 export default function styled(Component) {
     return (style, options) => {
         function StyledComponent(props) {

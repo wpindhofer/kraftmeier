@@ -35,7 +35,6 @@ class App extends Component {
                         <Route exact path='/' component={Index}/>
                         <Route exact path='/create' component={Create}/>
                         <Route path='/edit/:id' component={Edit}/>
-                        <Route path='/index' component={Index}/>
                     </Switch>
                 </div>
             </Router>
