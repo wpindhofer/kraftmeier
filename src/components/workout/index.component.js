@@ -5,6 +5,12 @@ import Edit from "./edit.component";
 import Create from "./create.component";
 import DateFormatHelper from "../helper/DateFormatHelper";
 import Modal from '../helper/modal.component';
+import Table from '@material-ui/core/Table';
+import TableBody from '@material-ui/core/TableBody';
+import TableCell from '@material-ui/core/TableCell';
+import TableHead from '@material-ui/core/TableHead';
+import TableRow from '@material-ui/core/TableRow';
+import Button from '@material-ui/core/Button';
 
 const headerItem = (
     <p>
@@ -15,29 +21,40 @@ const headerItem = (
 const deleteText1 = 'Wollen Sie den Trainingsplan "';
 const deleteText2 = '" wirklich löschen?';
 
+const styles = theme => ({
+    button: {
+        margin: theme.spacing.unit,
+    },
+    input: {
+        display: 'none',
+    },
+});
+
+
 function RenderWorkouts(props) {
     const renderMe = props.workout.map((b) =>
-        <tr key={b._id}>
-            <td>{b.workout_name}</td>
-            <td>{DateFormatHelper.getFormattedData(b.workout_created_date)}</td>
-            <td>
-                <button className="btn btn-primary" key={b._id + 'edit'}
+        <TableRow key={b._id}>
+            <TableCell>{b.workout_name}</TableCell>
+            <TableCell>{DateFormatHelper.getFormattedData(b.workout_created_date)}</TableCell>
+            <TableCell>
+                <Button variant="contained" color="primary" className={styles.button}
+                        key={b._id + 'edit'}
                         onClick={() => props.editItem(b._id)}>Edit
-                </button>
-            </td>
-            <td>
-                <button className="btn btn-danger" onClick={() => props.createDeleteModal(b._id, b.workout_name)}
+                </Button>
+            </TableCell>
+            <TableCell>
+                <Button variant="contained" color="secondary" className={styles.button}
+                        onClick={() => props.createDeleteModal(b._id, b.workout_name)}
                         key={b._id + 'remove'}>
                     Remove
-                </button>
-            </td>
-        </tr>
+                </Button>
+            </TableCell>
+        </TableRow>
     );
     return renderMe;
 }
 
 export default class Index extends Component {
-
 
     constructor(props) {
         super(props);
@@ -115,24 +132,29 @@ export default class Index extends Component {
             <div style={{marginTop: 10}}>
                 {headerItem}
                 <p>
-                    <button className="btn btn-primary" key={'createWorkoutButton'}
+                    <Button variant="contained" color="primary" className={styles.button}
+                            key={'createWorkoutButton'}
                             onClick={() => this.createItem()}>Neuen Plan erstellen
-                    </button>
+                    </Button>
                 </p>
                 <br/>
-                <table className="table">
-                    <tr>
-                        <th>Plan</th>
-                        <th>Datum erstellt</th>
-                        <th></th>
-                        <th></th>
-                    </tr>
-                    <RenderWorkouts
-                        workout={this.state.workout}
-                        toggleModal={() => this.toggleModal()}
-                        createDeleteModal={(id, name) => this.createDeleteModal(id, name)}
-                        editItem={(id) => this.editItem(id)}
-                    />
+                <Table className="{classes.table}">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Plan</TableCell>
+                            <TableCell>Datum erstellt</TableCell>
+                            <TableCell></TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <RenderWorkouts
+                            workout={this.state.workout}
+                            toggleModal={() => this.toggleModal()}
+                            createDeleteModal={(id, name) => this.createDeleteModal(id, name)}
+                            editItem={(id) => this.editItem(id)}
+                        />
+                    </TableBody>
                     <Modal show={this.state.modalIsOpen}
                            onClose={(a) => this.tearDownDeleteModal(a)}
                            dialogTitle={'Trainingsplan löschen?'}
@@ -140,7 +162,7 @@ export default class Index extends Component {
                            buttonOk={'Ok'}
                            buttonNotOk={'Abbrechen'}>
                     </Modal>
-                </table>
+                </Table>
             </div>
         )
     }

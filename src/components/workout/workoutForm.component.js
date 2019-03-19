@@ -2,7 +2,13 @@ import React, {Component} from 'react';
 import WorkoutDataRetriever from "./backendComm/WorkoutDataRetriever";
 import DateFormatHelper from "../helper/DateFormatHelper";
 import axios from "axios";
+import Button from '@material-ui/core/Button';
+import styled from '../helper/StyledHelper';
 
+
+const MyButton = styled(Button)({
+    marginRight: '20px',
+});
 
 export default class WorkoutForm extends Component {
     constructor(props) {
@@ -72,9 +78,6 @@ export default class WorkoutForm extends Component {
     render() {
         return (
             <div style={{marginTop: 10}}>
-                <button className="btn btn-secondary" key={'back'}
-                        onClick={() => this.props.back(false)}>Zurück
-                </button>
                 {this.state.pageStatus ? <div>{this.state.pageStatus}</div> : ''}
                 <form onSubmit={this.onSubmit}>
                     <div className="form-group">
@@ -84,6 +87,7 @@ export default class WorkoutForm extends Component {
                             className="form-control"
                             value={this.state.workoutObj.workout_name}
                             onChange={this.onChangeWorkoutName}
+                            autoFocus
                         />
                     </div>
                     <div className="form-group">
@@ -95,7 +99,9 @@ export default class WorkoutForm extends Component {
                         />
                     </div>
                     <div className="form-group">
-                        <input type="submit" value="Save" className="btn btn-primary"/>
+                        <MyButton variant="contained" color="primary" type="submit">Speichern</MyButton>
+                        <MyButton variant="contained" key={'back'} onClick={() => this.props.back(false)}>Zurück
+                        </MyButton>
                     </div>
                 </form>
             </div>

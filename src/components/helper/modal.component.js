@@ -14,11 +14,6 @@ export default class Modal extends Component {
     };
 
     render() {
-        // Render nothing if the "show" prop is false
-/*        if (!this.props.show) {
-            return null;
-        }*/
-
         return (
             <div>
                 <Dialog
@@ -34,43 +29,16 @@ export default class Modal extends Component {
                         </DialogContentText>
                     </DialogContent>
                     <DialogActions>
-                        <Button onClick={() => this.handleClose(true)} color="primary" autoFocus>
+                        <Button variant="contained" onClick={() => this.handleClose(true)}>
                             {this.props.buttonOk}
                         </Button>
-                        <Button onClick={() => this.handleClose(false)} color="primary">
+                        <Button variant="contained" onClick={() => this.handleClose(false)}
+                                color="secondary">
                             {this.props.buttonNotOk}
                         </Button>
                     </DialogActions>
                 </Dialog>
             </div>
-
-
-
-
-/*
-            <div className="modal fade" animation={false}>>
-                <div className="modal-dialog">
-                    <div className="modal-content">
-                        <div className="modal-header">
-                            <h4 className="modal-title">Modal Header</h4>
-                            <button type="button" className="close"
-                                    onClick={() => this.props.onClose()}>&times;</button>
-                        </div>
-                        <div className="modal-body">
-                            <p>{this.props.children}</p>
-                        </div>
-                        <div className="modal-footer">
-                            <button type="button" className="btn btn-default" onClick={() => this.props.onClose()}>Close
-                            </button>
-                            {/!*data-dismiss="modal"*!/}
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-*/
-
-
         );
     }
 }
