@@ -15,7 +15,6 @@ export default class Modal extends Component {
 
     render() {
         return (
-            <div>
                 <Dialog
                     open={this.props.show}
                     onClose={() => this.handleClose(false)}
@@ -38,7 +37,6 @@ export default class Modal extends Component {
                         </Button>
                     </DialogActions>
                 </Dialog>
-            </div>
         );
     }
 }

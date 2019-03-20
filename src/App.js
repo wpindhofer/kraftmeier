@@ -4,9 +4,8 @@ import React, {Component} from 'react';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import {BrowserRouter as Router, Switch, Route, Link} from 'react-router-dom';
 
-import Create from './components/workout/create.component';
-import Edit from './components/workout/edit.component';
 import Index from './components/workout/index.component';
+import IndexWorkoutDay from './components/workoutDay/indexDay.component';
 
 class App extends Component {
     render() {
@@ -33,8 +32,9 @@ class App extends Component {
                     </nav>
                     <Switch>
                         <Route exact path='/' component={Index}/>
-                        <Route exact path='/create' component={Create}/>
-                        <Route path='/edit/:id' component={Edit}/>
+                        <Route exact path='/workoutDays' component={IndexWorkoutDay}/>
+                        {/*<Route exact path='/create' component={Create}/>*/}
+                        {/*<Route path='/edit/:id' component={Edit}/>*/}
                     </Switch>
                 </div>
             </Router>

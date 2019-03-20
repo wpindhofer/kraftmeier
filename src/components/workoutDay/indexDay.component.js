@@ -1,11 +1,10 @@
-import WorkoutDataRetriever from "./backendComm/WorkoutDataRetriever";
-import Edit from "./edit.component";
-import Create from "./create.component";
-import DateFormatHelper from "../js-helper-classes/DateFormatHelper";
-import Modal from '../generic/modal.component';
-
 import React, {Component} from 'react';
 import axios from "axios";
+import WorkoutDayDataRetriever from "./backendComm/WorkoutDayDataRetriever";
+import Edit from "./editDay.component";
+import Create from "./createDay.component";
+import DateFormatHelper from "../js-helper-classes/DateFormatHelper";
+import Modal from '../generic/modal.component';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -15,23 +14,22 @@ import Button from '@material-ui/core/Button';
 import styled from '../js-helper-classes/StyledHelper';
 
 
-const MyTableCell = styled(TableCell)({
+const MyTableCell = styled(TableCell) ({
     cursor: 'pointer',
 });
 
 const headerItem = (
-    <h2>Trainingspläne</h2>
+    <h2>Trainingstage</h2>
 );
 
-const deleteText1 = 'Wollen Sie den Trainingsplan "';
+const deleteText1 = 'Wollen Sie den Trainingstag "';
 const deleteText2 = '" wirklich löschen?';
 
-function RenderWorkouts(props) {
-    const renderMe = props.workout.map((b) =>
+function RenderWorkoutDays(props) {
+    const renderMe = props.workoutDay.map((b) =>
         <TableRow key={b._id} hover>
-            <MyTableCell onClick={() => props.openWorkoutDays()}>{b.workout_name}</MyTableCell>
-            <MyTableCell
-                onClick={() => props.openWorkoutDays()}>{DateFormatHelper.getFormattedData(b.workout_created_date)}</MyTableCell>
+            <MyTableCell onClick={() => props.editItem(b._id)}>{b.workout_name}</MyTableCell>
+            <MyTableCell onClick={() => props.editItem(b._id)}>{DateFormatHelper.getFormattedData(b.workout_created_date)}</MyTableCell>
             <TableCell>
                 <Button variant="contained" color="primary"
                         key={b._id + 'edit'}
@@ -50,12 +48,12 @@ function RenderWorkouts(props) {
     return renderMe;
 }
 
-export default class Index extends Component {
+export default class IndexDay extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            workout: [],
+            workoutDay: [],
             pageMode: 'index',
             selectedId: null,
             modalIsOpen: false,
@@ -87,17 +85,17 @@ export default class Index extends Component {
 
     }
 
-    getWorkoutData() {
-        WorkoutDataRetriever.getWorkoutData('', (w) => this.setState({workout: w}));
+    getWorkoutDayData() {
+        WorkoutDayDataRetriever.getWorkoutDayData('', (w) => this.setState({workoutDay: w}));
     }
 
     componentDidMount() {
-        this.getWorkoutData();
+        this.getWorkoutDayData();
     }
 
     deleteItem(id) {
-        axios.get('http://localhost:4000/workout/delete/' + id)
-            .then(res => this.getWorkoutData());
+        axios.get('http://localhost:4000/workoutDay/delete/' + id)
+            .then(res => this.getWorkoutDayData());
     }
 
     editItem(id) {
@@ -105,11 +103,6 @@ export default class Index extends Component {
             pageMode: 'edit',
             selectedId: id,
         });
-    }
-
-    openWorkoutDays() {
-        // window.location.href = 'workoutDays';
-        this.props.history.push('/workoutDays')
     }
 
     createItem() {
@@ -124,7 +117,7 @@ export default class Index extends Component {
             selectedId: null,
         })
         if (shouldUpdate)
-            this.getWorkoutData();
+            this.getWorkoutDayData();
     }
 
     renderIndex() {
@@ -133,7 +126,7 @@ export default class Index extends Component {
                 {headerItem}
                 <p>
                     <Button variant="contained" color="primary"
-                            key={'createWorkoutButton'}
+                            key={'createWorkoutDayButton'}
                             onClick={() => this.createItem()}>Neuen Plan erstellen
                     </Button>
                 </p>
@@ -148,17 +141,16 @@ export default class Index extends Component {
                         </TableRow>
                     </TableHead>
                     <TableBody>
-                        <RenderWorkouts
-                            workout={this.state.workout}
+                        <RenderWorkoutDays
+                            workoutDay={this.state.workoutDay}
                             toggleModal={() => this.toggleModal()}
                             createDeleteModal={(id, name) => this.createDeleteModal(id, name)}
                             editItem={(id) => this.editItem(id)}
-                            openWorkoutDays={(id) => this.openWorkoutDays(id)}
                         />
                     </TableBody>
                     <Modal show={this.state.modalIsOpen}
                            onClose={(a) => this.tearDownDeleteModal(a)}
-                           dialogTitle={'Trainingsplan löschen?'}
+                           dialogTitle={'Trainingstag löschen?'}
                            dialogText={this.state.modalText}
                            buttonOk={'Ok'}
                            buttonNotOk={'Abbrechen'}>

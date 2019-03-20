@@ -6,6 +6,7 @@ const cors = require('cors');
 const mongoose = require('mongoose');
 const config = require('./DB.js');
 const workoutRoute = require('./workoutplan.route');
+const workoutDayRoute = require('./workoutday.route');
 
 mongoose.Promise = global.Promise;
 mongoose.connect(config.DB, {useNewUrlParser: true}).then(
@@ -22,6 +23,7 @@ app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 app.use('/workout', workoutRoute);
+app.use('/workoutDay', workoutDayRoute);
 
 app.listen(PORT, function () {
     console.log('Server is running on Port:', PORT);
