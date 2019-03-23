@@ -6,7 +6,7 @@ export default class CreateDay extends Component {
         return (
             <div style={{marginTop: 10}}>
                 <h3>Erstelle neuen Trainingstag</h3>
-                <WorkoutDayForm back={(u) => this.props.back(u)}/>
+                <WorkoutDayForm workoutId={this.props.workoutId} back={(u) => this.props.back(u)}/>
             </div>
         )
     }

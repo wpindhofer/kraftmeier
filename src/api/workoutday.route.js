@@ -20,9 +20,10 @@ workoutDayRoutes.route('/add').post(function (req, res) {
 });
 
 // Defined get data(index or listing) route
-workoutDayRoutes.route('/').get(function (req, res) {
-    logger.debug("Route for indexDay found");
-    WorkoutDay.find(function (err, workoutDays) {
+workoutDayRoutes.route('/:workoutId').get(function (req, res) {
+    let workoutId = req.params.workoutId;
+    logger.debug("Querying for Workdays for workout:" + workoutId);
+    WorkoutDay.find({ workout: workoutId}, function (err, workoutDays) {
         if (err) {
             logger.error(err);
         } else {
@@ -46,9 +47,7 @@ workoutDayRoutes.route('/update/:id').post(function (req, res) {
         if (!workoutDay)
             res.status(404).send("WorkoutDay data is not found");
         else {
-            workoutDay.workout_name = req.body.workout_name;
-            workoutDay.workout_created_date = req.body.workout_created_date;
-
+            workoutDay.workoutDay_name = req.body.workoutDay_name;
             workoutDay.save().then(workoutDay => {
                 res.json('WorkoutDay update complete');
             })

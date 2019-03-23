@@ -3,14 +3,15 @@ const Schema = mongoose.Schema;
 
 // Define collection and schema for Workout
 let WorkoutDay = new Schema({
-    workout_name: {
+    workoutDay_name: {
         type: String
     },
-    workout_created_date: {
-        type: Date
-    },
+    workout: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Workout'
+    }
 },{
-    collection: 'workout'
+    collection: 'workoutDay'
 });
 
 module.exports = mongoose.model('WorkoutDay', WorkoutDay);

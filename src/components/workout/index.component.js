@@ -29,7 +29,7 @@ const deleteText2 = '" wirklich löschen?';
 function RenderWorkouts(props) {
     const renderMe = props.workout.map((b) =>
         <TableRow key={b._id} hover>
-            <MyTableCell onClick={() => props.openWorkoutDays()}>{b.workout_name}</MyTableCell>
+            <MyTableCell onClick={() => props.openWorkoutDays(b._id)}>{b.workout_name}</MyTableCell>
             <MyTableCell
                 onClick={() => props.openWorkoutDays()}>{DateFormatHelper.getFormattedData(b.workout_created_date)}</MyTableCell>
             <TableCell>
@@ -107,9 +107,13 @@ export default class Index extends Component {
         });
     }
 
-    openWorkoutDays() {
-        // window.location.href = 'workoutDays';
-        this.props.history.push('/workoutDays')
+    openWorkoutDays(id) {
+        this.props.history.push({
+            pathname: '/workoutDays',
+            // search: '?the=query',
+            state: { id: id }
+        });
+
     }
 
     createItem() {

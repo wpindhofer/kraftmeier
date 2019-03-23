@@ -1,9 +1,9 @@
 import React, {Component} from 'react';
-import axios from "axios";
-import WorkoutDayDataRetriever from "./backendComm/WorkoutDayDataRetriever";
-import Edit from "./editDay.component";
-import Create from "./createDay.component";
-import DateFormatHelper from "../js-helper-classes/DateFormatHelper";
+import axios from 'axios';
+import WorkoutDayDataRetriever from './backendComm/WorkoutDayDataRetriever';
+import WorkoutDataRetriever from '../workout/backendComm/WorkoutDataRetriever';
+import Edit from './editDay.component';
+import Create from './createDay.component';
 import Modal from '../generic/modal.component';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
@@ -13,14 +13,13 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import styled from '../js-helper-classes/StyledHelper';
 
-
 const MyTableCell = styled(TableCell) ({
     cursor: 'pointer',
 });
 
-const headerItem = (
-    <h2>Trainingstage</h2>
-);
+// const headerItem = (
+//     <h2>Workout {this.state.workoutName} - Trainingstage</h2>
+// );
 
 const deleteText1 = 'Wollen Sie den Trainingstag "';
 const deleteText2 = '" wirklich löschen?';
@@ -28,8 +27,7 @@ const deleteText2 = '" wirklich löschen?';
 function RenderWorkoutDays(props) {
     const renderMe = props.workoutDay.map((b) =>
         <TableRow key={b._id} hover>
-            <MyTableCell onClick={() => props.editItem(b._id)}>{b.workout_name}</MyTableCell>
-            <MyTableCell onClick={() => props.editItem(b._id)}>{DateFormatHelper.getFormattedData(b.workout_created_date)}</MyTableCell>
+            <MyTableCell onClick={() => props.editItem(b._id)}>{b.workoutDay_name}</MyTableCell>
             <TableCell>
                 <Button variant="contained" color="primary"
                         key={b._id + 'edit'}
@@ -38,7 +36,7 @@ function RenderWorkoutDays(props) {
             </TableCell>
             <TableCell>
                 <Button variant="contained" color="secondary"
-                        onClick={() => props.createDeleteModal(b._id, b.workout_name)}
+                        onClick={() => props.createDeleteModal(b._id, b.workoutDay_name)}
                         key={b._id + 'remove'}>
                     Remove
                 </Button>
@@ -53,6 +51,8 @@ export default class IndexDay extends Component {
     constructor(props) {
         super(props);
         this.state = {
+            workoutId: this.props.location.state.id,
+            workoutName: '',
             workoutDay: [],
             pageMode: 'index',
             selectedId: null,
@@ -86,7 +86,15 @@ export default class IndexDay extends Component {
     }
 
     getWorkoutDayData() {
-        WorkoutDayDataRetriever.getWorkoutDayData('', (w) => this.setState({workoutDay: w}));
+        WorkoutDayDataRetriever.getWorkoutDayData(this.state.workoutId, (w) => this.setState({workoutDay: w}));
+        this.getWorkoutNameData();
+    }
+
+    getWorkoutNameData() {
+        WorkoutDataRetriever.getSingleWorkoutData(this.state.workoutId,
+            (w) => {
+                this.setState({workoutName: w.workout_name});
+            });
     }
 
     componentDidMount() {
@@ -123,19 +131,18 @@ export default class IndexDay extends Component {
     renderIndex() {
         return (
             <div style={{marginTop: 10}}>
-                {headerItem}
+                <h2>{this.state.workoutName} - Trainingstage</h2>
                 <p>
                     <Button variant="contained" color="primary"
                             key={'createWorkoutDayButton'}
-                            onClick={() => this.createItem()}>Neuen Plan erstellen
+                            onClick={() => this.createItem()}>Neuen Trainingstag erstellen
                     </Button>
                 </p>
                 <br/>
                 <Table className="{classes.table}">
                     <TableHead>
                         <TableRow>
-                            <TableCell>Plan</TableCell>
-                            <TableCell>Datum erstellt</TableCell>
+                            <TableCell>Trainingstag</TableCell>
                             <TableCell></TableCell>
                             <TableCell></TableCell>
                         </TableRow>
@@ -163,7 +170,7 @@ export default class IndexDay extends Component {
     renderEdit() {
         return (
             <div style={{marginTop: 10}}>
-                {headerItem}
+                <h2>{this.state.workoutName} - Trainingstage</h2>
                 <Edit id={this.state.selectedId} back={(u) => this.backToIndex(u)}/>
             </div>
         )
@@ -172,8 +179,8 @@ export default class IndexDay extends Component {
     renderCreate() {
         return (
             <div style={{marginTop: 10}}>
-                {headerItem}
-                <Create back={(u) => this.backToIndex(u)}/>
+                <h2>{this.state.workoutName} - Trainingstage</h2>
+                <Create workoutId={this.state.workoutId} back={(u) => this.backToIndex(u)}/>
             </div>
         )
     }

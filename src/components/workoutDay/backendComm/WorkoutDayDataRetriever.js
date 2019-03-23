@@ -2,10 +2,10 @@ import axios from "axios";
 
 export default class WorkoutDayDataRetriever {
 
-    static getWorkoutDayData(id, updateData) {
-        axios.get('http://localhost:4000/workoutDay/')
+    static getWorkoutDayData(workoutId, updateData) {
+        axios.get('http://localhost:4000/workoutDay/'+workoutId)
             .then(response => {
-                console.log('Workout Day data updated from BE');
+                console.log('Workout Day data loaded for workout:'+workoutId+' from BE');
                 updateData(response.data);
             })
             .catch(function (error) {
