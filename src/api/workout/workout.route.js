@@ -3,8 +3,8 @@ const workoutRoutes = express.Router();
 
 
 // Require Workout model in our routes module
-let Workout = require('./workoutplan.model');
-let logger = require('./mylogger').logger;
+let Workout = require('./workout.model');
+let logger = require('../mylogger').logger;
 
 // Defined store route
 workoutRoutes.route('/add').post(function (req, res) {
