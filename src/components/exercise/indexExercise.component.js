@@ -12,7 +12,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import styled from '../js-helper-classes/StyledHelper';
 
-const MyTableCell = styled(TableCell) ({
+const MyTableCell = styled(TableCell)({
     cursor: 'pointer',
 });
 
@@ -122,13 +122,15 @@ export default class IndexExercise extends Component {
     renderIndex() {
         return (
             <div style={{marginTop: 10}}>
-                {headerItem}
-                <p>
-                    <Button variant="contained" color="primary"
-                            key={'createExerciseButton'}
-                            onClick={() => this.createItem()}>Neue Übung erstellen
-                    </Button>
-                </p>
+                <div>
+                    {headerItem}
+                    <p>
+                        <Button variant="contained" color="primary"
+                                key={'createExerciseButton'}
+                                onClick={() => this.createItem()}>Neue Übung erstellen
+                        </Button>
+                    </p>
+                </div>
                 <br/>
                 <Table className="{classes.table}">
                     <TableHead>

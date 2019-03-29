@@ -2,6 +2,7 @@ import React, {Component} from 'react';
 import axios from 'axios';
 import WorkoutDayDataRetriever from './backendComm/WorkoutDayDataRetriever';
 import WorkoutDataRetriever from '../workout/backendComm/WorkoutDataRetriever';
+import DetailDay from './detailDay.component';
 import Edit from './editDay.component';
 import Create from './createDay.component';
 import Modal from '../generic/modal.component';
@@ -13,7 +14,7 @@ import TableRow from '@material-ui/core/TableRow';
 import Button from '@material-ui/core/Button';
 import styled from '../js-helper-classes/StyledHelper';
 
-const MyTableCell = styled(TableCell) ({
+const MyTableCell = styled(TableCell)({
     cursor: 'pointer',
 });
 
@@ -25,9 +26,9 @@ const deleteText1 = 'Wollen Sie den Trainingstag "';
 const deleteText2 = '" wirklich löschen?';
 
 function RenderWorkoutDays(props) {
-    const renderMe = props.workoutDay.map((b) =>
+    const renderMe = props.workoutDay.map((b, index) =>
         <TableRow key={b._id} hover>
-            <MyTableCell onClick={() => props.editItem(b._id)}>{b.workoutDay_name}</MyTableCell>
+            <MyTableCell onClick={() => props.detailItem(b._id, index)}>{b.workoutDay_name}</MyTableCell>
             <TableCell>
                 <Button variant="contained" color="primary"
                         key={b._id + 'edit'}
@@ -56,6 +57,7 @@ export default class IndexDay extends Component {
             workoutDay: [],
             pageMode: 'index',
             selectedId: null,
+            selectedIndex: null,
             modalIsOpen: false,
             idMarkedForDelete: null,
             modalText: '',
@@ -113,6 +115,15 @@ export default class IndexDay extends Component {
         });
     }
 
+
+    detailItem(id, index) {
+        this.setState({
+            pageMode: 'detail',
+            selectedId: id,
+            selectedIndex: index,
+        });
+    }
+
     createItem() {
         this.setState({
             pageMode: 'create',
@@ -153,6 +164,7 @@ export default class IndexDay extends Component {
                             toggleModal={() => this.toggleModal()}
                             createDeleteModal={(id, name) => this.createDeleteModal(id, name)}
                             editItem={(id) => this.editItem(id)}
+                            detailItem={(id, index) => this.detailItem(id, index)}
                         />
                     </TableBody>
                     <Modal show={this.state.modalIsOpen}
@@ -185,6 +197,15 @@ export default class IndexDay extends Component {
         )
     }
 
+    renderDetail() {
+        return (
+            <div style={{marginTop: 10}}>
+                <h2>{this.state.workoutName} - {this.state.workoutDay[this.state.selectedIndex].workoutDay_name}</h2>
+                <DetailDay/>
+            </div>
+        )
+    }
+
     render() {
         switch (this.state.pageMode) {
             case 'index':
@@ -193,6 +214,8 @@ export default class IndexDay extends Component {
                 return this.renderCreate();
             case 'edit':
                 return this.renderEdit();
+            case 'detail':
+                return this.renderDetail();
             default:
                 return;
         }
