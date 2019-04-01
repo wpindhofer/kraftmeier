@@ -41,6 +41,15 @@ workoutDayRoutes.route('/edit/:id').get(function (req, res) {
     });
 });
 
+// Get workoutDay with populated exercises
+workoutDayRoutes.route('/getPopulated/:id').get(function (req, res) {
+    let id = req.params.id;
+    WorkoutDay.findById(id).populate('exercises').exec(function (err, workoutDay) {
+        logger.debug("populated Workday found");
+        res.json(workoutDay);
+    });
+});
+
 //  Defined update route
 workoutDayRoutes.route('/update/:id').post(function (req, res) {
     WorkoutDay.findById(req.params.id, function (err, workoutDay) {

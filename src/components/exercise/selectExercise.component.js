@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import ExerciseDataRetriever from './backendComm/ExerciseDataRetriever';
+import ExerciseDataComm from './backendComm/ExerciseDataComm';
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -37,7 +37,7 @@ export default class SelectExercise extends Component {
     }
 
     getExerciseData() {
-        ExerciseDataRetriever.getExerciseData((w) => this.setState({exercise: w}));
+        ExerciseDataComm.getExerciseData((w) => this.setState({exercise: w}));
     }
 
     componentDidMount() {
@@ -45,10 +45,7 @@ export default class SelectExercise extends Component {
     }
 
     selectItem(id) {
-        this.setState({
-            pageMode: 'edit',
-            selectedId: id,
-        });
+        this.props.addExercise(id);
     }
 
     renderIndex() {

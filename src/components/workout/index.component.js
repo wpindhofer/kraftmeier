@@ -1,11 +1,9 @@
-import WorkoutDataRetriever from "./backendComm/WorkoutDataRetriever";
+import WorkoutDataComm from "./backendComm/WorkoutDataComm";
 import Edit from "./edit.component";
 import Create from "./create.component";
 import DateFormatHelper from "../js-helper-classes/DateFormatHelper";
 import Modal from '../generic/modal.component';
-
 import React, {Component} from 'react';
-import axios from "axios";
 import Table from '@material-ui/core/Table';
 import TableBody from '@material-ui/core/TableBody';
 import TableCell from '@material-ui/core/TableCell';
@@ -83,21 +81,14 @@ export default class Index extends Component {
             idMarkedForDelete: null,
             modalIsOpen: !this.state.modalIsOpen,
         });
-
-
     }
 
     getWorkoutData() {
-        WorkoutDataRetriever.getWorkoutData('', (w) => this.setState({workout: w}));
-    }
-
-    componentDidMount() {
-        this.getWorkoutData();
+        WorkoutDataComm.getWorkoutData('', (w) => this.setState({workout: w}));
     }
 
     deleteItem(id) {
-        axios.get('http://localhost:4000/workout/delete/' + id)
-            .then(res => this.getWorkoutData());
+        WorkoutDataComm.deleteWorkout(id, () => this.getWorkoutData());
     }
 
     editItem(id) {
@@ -111,7 +102,7 @@ export default class Index extends Component {
         this.props.history.push({
             pathname: '/workoutDays',
             // search: '?the=query',
-            state: { id: id }
+            state: {id: id}
         });
 
     }
@@ -129,6 +120,10 @@ export default class Index extends Component {
         })
         if (shouldUpdate)
             this.getWorkoutData();
+    }
+
+    componentDidMount() {
+        this.getWorkoutData();
     }
 
     renderIndex() {

@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export default class WorkoutDataRetriever {
+export default class WorkoutDataComm {
 
     static getWorkoutData(id, updateData) {
         axios.get('http://localhost:4000/workout/')
@@ -14,7 +14,7 @@ export default class WorkoutDataRetriever {
     }
 
     static getSingleWorkoutData(id, updateData) {
-        axios.get('http://localhost:4000/workout/edit/'+id)
+        axios.get('http://localhost:4000/workout/edit/' + id)
             .then(response => {
                 console.log('Workout single data updated from BE');
                 response.data ? updateData(response.data) : console.log('Not 1 element returned');
@@ -22,6 +22,25 @@ export default class WorkoutDataRetriever {
             .catch(function (error) {
                 console.log(error);
             })
+    }
+
+    static insertWorkout(workout, updateData) {
+        axios.post('http://localhost:4000/workout/add', workout)
+            .then(response => {
+                updateData(response.data)
+            });
+    }
+
+    static updateWorkout(workoutId, workout, updateData) {
+        axios.post('http://localhost:4000/workout/update/' + workoutId, workout)
+            .then(response => {
+                updateData(response.data)
+            });
+    }
+
+    static deleteWorkout(workoutId, updateData) {
+        axios.get('http://localhost:4000/workout/delete/' + workoutId)
+            .then(response => updateData());
     }
 }
 

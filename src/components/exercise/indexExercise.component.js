@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import axios from 'axios';
-import ExerciseDataRetriever from './backendComm/ExerciseDataRetriever';
+import ExerciseDataComm from './backendComm/ExerciseDataComm';
 import Edit from './editExercise.component';
 import Create from './createExercise.component';
 import Modal from '../generic/modal.component';
@@ -85,16 +84,15 @@ export default class IndexExercise extends Component {
     }
 
     getExerciseData() {
-        ExerciseDataRetriever.getExerciseData((w) => this.setState({exercise: w}));
+        ExerciseDataComm.getExerciseData((w) => this.setState({exercise: w}));
     }
 
     componentDidMount() {
         this.getExerciseData();
     }
 
-    deleteItem(id) {
-        axios.get('http://localhost:4000/exercise/delete/' + id)
-            .then(res => this.getExerciseData());
+    deleteItem(exerciseId) {
+        ExerciseDataComm.deleteExercise(exerciseId, () => this.getWorkoutData());
     }
 
     editItem(id) {

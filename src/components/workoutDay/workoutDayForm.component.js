@@ -1,6 +1,5 @@
 import React, {Component} from 'react';
-import axios from "axios";
-import WorkoutDayDataRetriever from './backendComm/WorkoutDayDataRetriever';
+import WorkoutDayDataComm from './backendComm/WorkoutDayDataComm';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import styled from '../js-helper-classes/StyledHelper';
@@ -34,7 +33,7 @@ export default class WorkoutDayForm extends Component {
 
     componentDidMount() {
         if (this.state._id) {
-            WorkoutDayDataRetriever.getSingleWorkoutDayData(this.state._id,
+            WorkoutDayDataComm.getSingleWorkoutDayData(this.state._id,
                 (w) => {
                     let newWorkoutDayObj = this.state.workoutDayObj;
                     newWorkoutDayObj.workoutDay_name = w.workoutDay_name;
@@ -46,16 +45,16 @@ export default class WorkoutDayForm extends Component {
         }
     }
 
-    submitMethod(w) {
+    submitMethod(workoutDay) {
         if (this.state.edit) {
-            axios.post('http://localhost:4000/workoutDay/update/' + this.state._id, w)
-                .then(res => {
+            WorkoutDayDataComm.updateWorkoutDay(this.state._id, workoutDay,
+                (res) => {
                     console.log(res.data);
                     this.props.back(true);
                 });
         } else {
-            axios.post('http://localhost:4000/workoutDay/add', w)
-                .then(res => {
+            WorkoutDayDataComm.insertWorkoutDay(workoutDay,
+                (res) => {
                     console.log(res.data);
                     this.props.back(true);
                 });

@@ -1,97 +1,59 @@
 import React, {Component} from 'react';
 import SelectExercise from '../exercise/selectExercise.component';
-// import TableCell from '@material-ui/core/TableCell/index';
-// import TableRow from '@material-ui/core/TableRow/index';
+import TableCell from '@material-ui/core/TableCell/index';
+import TableRow from '@material-ui/core/TableRow/index';
 import Button from '@material-ui/core/Button/index';
-// import styled from '../js-helper-classes/StyledHelper';
+import WorkoutDayDataComm from "./backendComm/WorkoutDayDataComm";
+import Table from "@material-ui/core/Table";
+import TableHead from "@material-ui/core/TableHead";
+import TableBody from "@material-ui/core/TableBody";
 
-// const MyTableCell = styled(TableCell)({
-//     cursor: 'pointer',
-// });
+function RenderExercises4Workday(props) {
+    if(props.workoutDay === null)
+        return null;
 
-// const headerItem = (
-//     <h2>Workout {this.state.workoutName} - Trainingstage</h2>
-// );
-
-// const deleteText1 = 'Wollen Sie den Trainingstag "';
-// const deleteText2 = '" wirklich löschen?';
-
-// function RenderWorkoutDays(props) {
-//     const renderMe = props.workoutDay.map((b) =>
-//         <TableRow key={b._id} hover>
-//             <MyTableCell onClick={() => props.editItem(b._id)}>{b.workoutDay_name}</MyTableCell>
-//             <TableCell>
-//                 <Button variant="contained" color="primary"
-//                         key={b._id + 'edit'}
-//                         onClick={() => props.editItem(b._id)}>Edit
-//                 </Button>
-//             </TableCell>
-//             <TableCell>
-//                 <Button variant="contained" color="secondary"
-//                         onClick={() => props.createDeleteModal(b._id, b.workoutDay_name)}
-//                         key={b._id + 'remove'}>
-//                     Remove
-//                 </Button>
-//             </TableCell>
-//         </TableRow>
-//     );
-//     return renderMe;
-// }
+    const renderMe = props.workoutDay.exercises.map((exercise) =>
+        <TableRow key={exercise._id} hover>
+            <TableCell>{exercise.exercise_name}</TableCell>
+            <TableCell>
+                <Button variant="contained" color="secondary"
+                        onClick={() => props.removeExercise(exercise._id)}
+                        key={exercise._id + 'remove'}>
+                    -
+                </Button>
+            </TableCell>
+        </TableRow>
+    );
+    return renderMe;
+}
 
 export default class IndexDay extends Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            workoutId: '',
+            workoutId: props.workoutId,
             workoutDayId: '',
+            workoutDay: null,
             pageMode: 'index',
-            // modalIsOpen: false,
-            // idMarkedForDelete: null,
-            // modalText: '',
         };
     }
 
-    createDeleteModal(id, name) {
-        // let myModalText = deleteText1 + name + deleteText2;
-        //
-        // this.setState({
-        //     idMarkedForDelete: id,
-        //     modalIsOpen: true,
-        //     modalText: myModalText,
-        // });
-    }
-
-
-    tearDownDeleteModal(a) {
-        // if (a)
-        //     this.deleteItem(this.state.idMarkedForDelete);
-        //
-        // this.setState({
-        //     idMarkedForDelete: null,
-        //     modalIsOpen: !this.state.modalIsOpen,
-        // });
-    }
-
     getWorkoutDayData() {
-        // WorkoutDayDataRetriever.getWorkoutDayData(this.state.workoutId, (w) => this.setState({workoutDay: w}));
-        // this.getWorkoutNameData();
-    }
-
-    getWorkoutNameData() {
-        // WorkoutDataRetriever.getSingleWorkoutData(this.state.workoutId,
-        //     (w) => {
-        //         this.setState({workoutName: w.workout_name});
-        //     });
+        WorkoutDayDataComm.getSingleWorkoutDayDataPopulated(this.state.workoutId, (w) => this.setState({workoutDay: w}));
     }
 
     componentDidMount() {
-        // this.getWorkoutDayData();
+        this.getWorkoutDayData();
     }
 
-    deleteItem(id) {
-        // axios.get('http://localhost:4000/workoutDay/delete/' + id)
-        //     .then(res => this.getWorkoutDayData());
+    removeExercise(exerciseId) {
+        WorkoutDayDataComm.removeExerciseToWorkoutDay(this.state.workoutDay._id, exerciseId, () => this.getWorkoutDayData());
+    }
+
+    addExercise(exerciseId) {
+        WorkoutDayDataComm.addExerciseToWorkoutDay(this.state.workoutDay._id, exerciseId, () => this.getWorkoutDayData());
+        this.backToIndex(true);
     }
 
     addItem() {
@@ -105,9 +67,10 @@ export default class IndexDay extends Component {
         this.setState({
             pageMode: 'index',
             selectedId: null,
-        })
-        // if (shouldUpdate)
-        //     this.getWorkoutDayData();
+        });
+
+        if (shouldUpdate)
+            this.getWorkoutDayData();
     }
 
     renderIndex() {
@@ -118,6 +81,20 @@ export default class IndexDay extends Component {
                         key={'add'}
                         onClick={() => this.addItem()}>Add Exercise
                 </Button>
+                <Table className="{classes.table}">
+                    <TableHead>
+                        <TableRow>
+                            <TableCell>Zugeordnete Übungen</TableCell>
+                            <TableCell></TableCell>
+                        </TableRow>
+                    </TableHead>
+                    <TableBody>
+                        <RenderExercises4Workday
+                            workoutDay={this.state.workoutDay}
+                            removeExercise={(id, name) => this.removeExercise(id, name)}
+                        />
+                    </TableBody>
+                </Table>
             </div>
         )
     }
@@ -125,11 +102,9 @@ export default class IndexDay extends Component {
     renderAdd() {
         return (
             <div>
-                <SelectExercise/>
-                {/*<div style={{marginTop: 10}}>*/}
-                {/*    <h2>{this.state.workoutName} - Trainingstage</h2>*/}
-                {/*    <Create workoutId={this.state.workoutId} back={(u) => this.backToIndex(u)}/>*/}
-                {/*</div>*/}
+                <SelectExercise
+                    addExercise={(exerciseId) => this.addExercise(exerciseId)}
+                />
             </div>
         )
     }

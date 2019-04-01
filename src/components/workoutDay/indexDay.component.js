@@ -1,7 +1,6 @@
 import React, {Component} from 'react';
-import axios from 'axios';
-import WorkoutDayDataRetriever from './backendComm/WorkoutDayDataRetriever';
-import WorkoutDataRetriever from '../workout/backendComm/WorkoutDataRetriever';
+import WorkoutDayDataComm from './backendComm/WorkoutDayDataComm';
+import WorkoutDataComm from '../workout/backendComm/WorkoutDataComm';
 import DetailDay from './detailDay.component';
 import Edit from './editDay.component';
 import Create from './createDay.component';
@@ -88,24 +87,19 @@ export default class IndexDay extends Component {
     }
 
     getWorkoutDayData() {
-        WorkoutDayDataRetriever.getWorkoutDayData(this.state.workoutId, (w) => this.setState({workoutDay: w}));
+        WorkoutDayDataComm.getWorkoutDayData(this.state.workoutId, (w) => this.setState({workoutDay: w}));
         this.getWorkoutNameData();
     }
 
     getWorkoutNameData() {
-        WorkoutDataRetriever.getSingleWorkoutData(this.state.workoutId,
+        WorkoutDataComm.getSingleWorkoutData(this.state.workoutId,
             (w) => {
                 this.setState({workoutName: w.workout_name});
             });
     }
 
-    componentDidMount() {
-        this.getWorkoutDayData();
-    }
-
     deleteItem(id) {
-        axios.get('http://localhost:4000/workoutDay/delete/' + id)
-            .then(res => this.getWorkoutDayData());
+        WorkoutDayDataComm.deleteWorkoutDay(id, (w) => this.getWorkoutDayData());
     }
 
     editItem(id) {
@@ -137,6 +131,10 @@ export default class IndexDay extends Component {
         })
         if (shouldUpdate)
             this.getWorkoutDayData();
+    }
+
+    componentDidMount() {
+        this.getWorkoutDayData();
     }
 
     renderIndex() {
@@ -201,7 +199,7 @@ export default class IndexDay extends Component {
         return (
             <div style={{marginTop: 10}}>
                 <h2>{this.state.workoutName} - {this.state.workoutDay[this.state.selectedIndex].workoutDay_name}</h2>
-                <DetailDay/>
+                <DetailDay workoutId={this.state.selectedId}/>
             </div>
         )
     }

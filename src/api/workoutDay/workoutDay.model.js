@@ -9,7 +9,11 @@ let WorkoutDay = new Schema({
     workout: {
         type: mongoose.Schema.Types.ObjectId,
         ref: 'Workout'
-    }
+    },
+    exercises: [{
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'Exercise'
+    }]
 },{
     collection: 'workoutDay'
 });

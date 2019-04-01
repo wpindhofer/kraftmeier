@@ -1,10 +1,8 @@
 import React, {Component} from 'react';
-import axios from "axios";
-import ExerciseDataRetriever from './backendComm/ExerciseDataRetriever';
+import ExerciseDataComm from './backendComm/ExerciseDataComm';
 import Button from '@material-ui/core/Button';
 import TextField from '@material-ui/core/TextField';
 import styled from '../js-helper-classes/StyledHelper';
-
 
 const MyButton = styled(Button)({
     marginRight: '20px',
@@ -41,7 +39,7 @@ export default class ExerciseForm extends Component {
 
     componentDidMount() {
         if (this.state._id) {
-            ExerciseDataRetriever.getSingleExerciseData(this.state._id,
+            ExerciseDataComm.getSingleExerciseData(this.state._id,
                 (w) => {
                     let newExerciseObj = this.state.exerciseObj;
                     newExerciseObj.exercise_name = w.exercise_name;
@@ -53,22 +51,21 @@ export default class ExerciseForm extends Component {
         }
     }
 
-    submitMethod(w) {
+    submitMethod(exercise) {
         if (this.state.edit) {
-            axios.post('http://localhost:4000/exercise/update/' + this.state._id, w)
-                .then(res => {
+            ExerciseDataComm.updateExercise(this.state._id, exercise,
+                (res) => {
                     console.log(res.data);
                     this.props.back(true);
                 });
         } else {
-            axios.post('http://localhost:4000/exercise/add', w)
-                .then(res => {
+            ExerciseDataComm.insertExercise(exercise,
+                (res) => {
                     console.log(res.data);
                     this.props.back(true);
                 });
         }
     }
-
 
     onSubmit(e) {
         e.preventDefault();
