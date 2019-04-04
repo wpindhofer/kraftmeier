@@ -77,4 +77,37 @@ workoutDayRoutes.route('/delete/:id').get(function (req, res) {
     });
 });
 
+workoutDayRoutes.route('/addExercise/:id').post(function (req, res) {
+    WorkoutDay.findById(req.params.id, function (err, workoutDay) {
+        if (!workoutDay)
+            res.status(404).send("WorkoutDay data is not found");
+        else {
+            workoutDay.exercises.push(req.body.exerciseId);
+            workoutDay.save().then(workoutDay => {
+                res.json('WorkoutDay update complete');
+            })
+                .catch(err => {
+                    res.status(400).send("unable to update workoutDay in database");
+                });
+        }
+    });
+});
+
+workoutDayRoutes.route('/removeExercise/:id').post(function (req, res) {
+    WorkoutDay.findById(req.params.id, function (err, workoutDay) {
+        if (!workoutDay)
+            res.status(404).send("WorkoutDay data is not found");
+        else {
+            let pos = workoutDay.exercises.indexOf(req.body.exerciseId);
+            workoutDay.exercises.splice(pos, 1);
+            workoutDay.save().then(workoutDay => {
+                res.json('WorkoutDay update complete');
+            })
+                .catch(err => {
+                    res.status(400).send("unable to update workoutDay in database");
+                });
+        }
+    });
+});
+
 module.exports = workoutDayRoutes;

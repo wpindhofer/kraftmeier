@@ -56,12 +56,14 @@ export default class WorkoutDayDataComm {
     }
 
     static addExerciseToWorkoutDay(workoutDayId, exerciseId, updateData) {
-        //TODO: Implement add Exercise...
+        axios.post('http://localhost:4000/workoutDay/addExercise/' + workoutDayId, {exerciseId: exerciseId})
+            .then(response => {updateData()});
         return;
     }
 
     static removeExerciseToWorkoutDay(workoutDayId, exerciseId, updateData) {
-        //TODO: Implement remove Exercise...
+        axios.post('http://localhost:4000/workoutDay/removeExercise/' + workoutDayId, {exerciseId: exerciseId})
+            .then(response => {updateData()});
         return;
     }
 }
