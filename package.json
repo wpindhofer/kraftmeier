@@ -10,7 +10,7 @@
     "cors": "^2.8.5",
     "express": "^4.16.4",
     "log4js": "^4.0.2",
-    "mongoose": "^5.4.17",
+    "mongoose": "^5.7.5",
     "react": "^16.8.4",
     "react-dom": "^16.8.4",
     "react-router-dom": "^4.3.1",
